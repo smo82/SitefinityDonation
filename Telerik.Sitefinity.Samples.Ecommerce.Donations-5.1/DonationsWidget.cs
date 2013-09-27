@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
@@ -13,6 +14,7 @@ using Telerik.Sitefinity.Web.UI.ControlDesign;
 using Telerik.Sitefinity.Web.UI.Fields;
 using Telerik.Sitefinity.Ecommerce.Catalog.Model;
 using Telerik.Sitefinity.Configuration;
+using Telerik.Sitefinity.GenericContent.Model;
 
 namespace Telerik.Sitefinity.Samples.Ecommerce.Donations
 {
@@ -78,9 +80,17 @@ namespace Telerik.Sitefinity.Samples.Ecommerce.Donations
         {
             get
             {
-                if (this.product == null)
+                if (this.product == null && this.ProductId != null && this.ProductId != Guid.Empty)
                 {
-                    this.product = this.CatalogManager.GetProduct(this.ProductId);
+                    Product product = this.CatalogManager.GetProduct(this.ProductId);
+
+                    // We use the live product object
+                    if (product.Status == ContentLifecycleStatus.Master)
+                    {
+                        product = this.CatalogManager.GetProducts().First(p => p.OriginalContentId == product.Id && p.Status == ContentLifecycleStatus.Live);
+                    }
+
+                    this.product = product;
                 }
                 return this.product;
             }

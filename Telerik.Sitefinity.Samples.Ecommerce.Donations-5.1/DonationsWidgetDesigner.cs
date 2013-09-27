@@ -53,7 +53,7 @@ namespace Telerik.Sitefinity.Samples.Ecommerce.Donations
 
         protected override void InitializeControls(GenericContainer container)
         {
-            this.ProductSelector.ServiceUrl = ProductBackendDefinitions.ProductServiceUrl;
+            this.ProductSelector.ServiceUrl = ProductBackendDefinitions.ProductServiceUrl + "?filter=[PublishedDrafts]";
             this.ProductSelector.ItemType = typeof(Product).FullName;
         }
 
